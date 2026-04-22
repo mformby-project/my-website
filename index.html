@@ -123,7 +123,6 @@
             font-size: 0.85em;
             letter-spacing: 0.5px;
             animation: ticker-scroll linear infinite;
-            /* duration set by JS based on content length */
         }
 
         .ticker-content .separator {
@@ -162,6 +161,152 @@
             color: #00dd00;
         }
 
+        /* === CONTACT FORM === */
+        .form-section {
+            background: rgba(0, 20, 0, 0.7);
+            border: 2px solid #396fae;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 0, 0.2),
+                inset 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        .form-section h1 {
+            color: #396fae;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            font-size: 2em;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            text-align: center;
+        }
+
+        .form-subtitle {
+            color: #00aa00;
+            font-size: 0.85em;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 0;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: #396fae;
+            font-size: 0.75em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .form-group label .field-code {
+            color: #00aa00;
+            margin-right: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: rgba(0, 40, 0, 0.6);
+            border: 1px solid #396fae;
+            color: #00dd00;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            padding: 10px 14px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23396fae' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
+        .form-group select option {
+            background: #001400;
+            color: #00dd00;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #1a5c1a;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 130px;
+        }
+
+        /* Honeypot — invisible to humans, bots fill it in and get silently discarded */
+        .bot-field {
+            display: none;
+        }
+
+        .transmit-btn {
+            width: 100%;
+            background: transparent;
+            border: 2px solid #396fae;
+            color: #396fae;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .transmit-btn:hover {
+            background: #396fae;
+            color: #000;
+            box-shadow: 0 0 20px rgba(57, 111, 174, 0.5);
+        }
+
+        .transmit-btn:active {
+            transform: scale(0.98);
+        }
+
+        .transmit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .form-status {
+            margin-top: 16px;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+            text-align: center;
+            min-height: 1.4em;
+        }
+
+        .form-status.success { color: #00ff00; }
+        .form-status.error   { color: #ff4444; }
+
         /* === LINKS === */
         a {
             color: #00ffff;
@@ -185,11 +330,13 @@
 
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
-            .content-section {
+            .content-section,
+            .form-section {
                 padding: 20px;
             }
 
-            .content-section h1 {
+            .content-section h1,
+            .form-section h1 {
                 font-size: 1.5em;
             }
 
@@ -204,6 +351,11 @@
 
             .ticker-content {
                 font-size: 0.78em;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
             }
         }
 
@@ -254,6 +406,81 @@
             </p>
         </div>
 
+        <!-- CONTACT / SUBSPACE TRANSMISSION FORM -->
+        <div class="form-section">
+            <h1>Subspace Uplink</h1>
+            <p class="form-subtitle">// OPEN TRANSMISSION TERMINAL — ALL SECTORS MONITORED //</p>
+
+            <form
+                name="subspace-uplink"
+                method="POST"
+                data-netlify="true"
+                data-netlify-honeypot="bot-field"
+                id="contactForm"
+            >
+                <!-- Required by Netlify for AJAX submission -->
+                <input type="hidden" name="form-name" value="subspace-uplink">
+
+                <!-- Honeypot — hidden from humans, bots fill it in and get discarded -->
+                <div class="bot-field">
+                    <label>Leave this empty: <input name="bot-field"></label>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><span class="field-code">[01]</span> Callsign / Designation</label>
+                        <input
+                            type="text"
+                            name="callsign"
+                            placeholder="e.g. WANDERER-7 or your name"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label><span class="field-code">[02]</span> Point of Origin</label>
+                        <select name="origin">
+                            <option value="" disabled selected>— Select Sector —</option>
+                            <option>Earth — Inner System</option>
+                            <option>Luna — Near Side</option>
+                            <option>Luna — Far Side</option>
+                            <option>Mars — Northern Hemisphere</option>
+                            <option>Mars — Southern Hemisphere</option>
+                            <option>Asteroid Belt — Mining Operations</option>
+                            <option>Jupiter System</option>
+                            <option>Saturn System</option>
+                            <option>Outer Rim</option>
+                            <option>Origin Unknown / Classified</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><span class="field-code">[03]</span> Return Frequency (Email)</label>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="your@signal.net"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label><span class="field-code">[04]</span> Transmission Content</label>
+                    <textarea
+                        name="message"
+                        placeholder="Enter your message. All transmissions are logged and reviewed by station personnel."
+                        required
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="transmit-btn" id="transmitBtn">
+                    ◈ &nbsp; Transmit Message &nbsp; ◈
+                </button>
+
+                <div class="form-status" id="formStatus"></div>
+            </form>
+        </div>
+
         <!-- FOOTER -->
         <footer>
             <p>&copy; 2026 Lunar Orbit Radio Network<span class="blink">_</span></p>
@@ -263,10 +490,7 @@
 
     <script>
         // === TICKER LOGIC ===
-        // Fetches ticker.txt, shuffles lines randomly, builds a seamless looping scroll.
-        // To add/edit blurbs: just edit ticker.txt, one blurb per line.
-
-        const SCROLL_SPEED_PX_PER_SEC = 80; // increase = faster, decrease = slower
+        const SCROLL_SPEED_PX_PER_SEC = 80;
 
         function shuffle(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
@@ -278,15 +502,11 @@
 
         async function initTicker() {
             let blurbs = [];
-
             try {
                 const res = await fetch('ticker.txt?nocache=' + Date.now());
                 const text = await res.text();
-                blurbs = text.split('\n')
-                    .map(l => l.trim())
-                    .filter(l => l.length > 0);
+                blurbs = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
             } catch (e) {
-                // Fallback if file not found
                 blurbs = [
                     'LORN LIVE — transmitting from L5 on all sub-etha frequencies',
                     'SIGNAL CHECK — all systems nominal',
@@ -295,27 +515,15 @@
             }
 
             shuffle(blurbs);
-
             const separator = '<span class="separator"> ◈ </span>';
             const fullText = blurbs.join(separator);
-
-            // Build two copies side by side — the second copy makes the loop seamless
             const el = document.getElementById('tickerContent');
             el.innerHTML = fullText + separator + fullText + separator;
 
-            // Measure the width of ONE copy (half the total content)
-            // We animate exactly one copy width, then snap back — looks infinite
-            const track = document.getElementById('tickerTrack');
-            
-            // Wait a frame for layout
             requestAnimationFrame(() => {
-                const fullWidth = el.scrollWidth; // both copies
-                const halfWidth = fullWidth / 2;
+                const halfWidth = el.scrollWidth / 2;
                 const duration = halfWidth / SCROLL_SPEED_PX_PER_SEC;
-
                 el.style.animationDuration = duration + 's';
-
-                // Inject a keyframe that moves exactly one copy width
                 const styleSheet = document.createElement('style');
                 styleSheet.textContent = `
                     @keyframes ticker-scroll {
@@ -328,6 +536,42 @@
         }
 
         initTicker();
+
+        // === CONTACT FORM — AJAX SUBMIT FOR NETLIFY ===
+        // Submits without a full page reload and shows a themed status message.
+        const form = document.getElementById('contactForm');
+        const statusEl = document.getElementById('formStatus');
+        const btn = document.getElementById('transmitBtn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            btn.textContent = '◈   TRANSMITTING...   ◈';
+            btn.disabled = true;
+            statusEl.className = 'form-status';
+            statusEl.textContent = '';
+
+            try {
+                const res = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(new FormData(form)).toString()
+                });
+
+                if (res.ok) {
+                    statusEl.className = 'form-status success';
+                    statusEl.textContent = '// TRANSMISSION CONFIRMED — Signal received at L5. Standing by. //';
+                    form.reset();
+                } else {
+                    throw new Error('Non-OK response');
+                }
+            } catch (err) {
+                statusEl.className = 'form-status error';
+                statusEl.textContent = '// TRANSMISSION FAILED — Signal lost. Please retry or use alternate frequency. //';
+            } finally {
+                btn.textContent = '◈   Transmit Message   ◈';
+                btn.disabled = false;
+            }
+        });
     </script>
 </body>
 </html>
