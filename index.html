@@ -59,13 +59,81 @@
             text-align: center;
             padding: 40px 0;
             border-bottom: 2px solid #396fae;
-            margin-bottom: 60px;
+            margin-bottom: 0;
         }
 
         .logo-section img {
             max-width: 100%;
             height: auto;
             filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.3));
+        }
+
+        /* === NEWS TICKER === */
+        .ticker-wrapper {
+            background: rgba(0, 10, 0, 0.95);
+            border: 2px solid #396fae;
+            border-top: none;
+            margin-bottom: 60px;
+            overflow: hidden;
+            display: flex;
+            align-items: stretch;
+        }
+
+        .ticker-label {
+            background: #396fae;
+            color: #000;
+            font-weight: bold;
+            font-size: 0.75em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            border-right: 2px solid #00ffff;
+        }
+
+        .ticker-label .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+        }
+
+        .ticker-track {
+            overflow: hidden;
+            flex: 1;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .ticker-content {
+            display: inline-block;
+            white-space: nowrap;
+            color: #00dd00;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            animation: ticker-scroll linear infinite;
+            /* duration set by JS based on content length */
+        }
+
+        .ticker-content .separator {
+            color: #396fae;
+            margin: 0 20px;
+        }
+
+        @keyframes ticker-scroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         /* === CONTENT SECTION === */
@@ -127,11 +195,19 @@
 
             .logo-section {
                 padding: 20px 0;
-                margin-bottom: 30px;
+            }
+
+            .ticker-label {
+                font-size: 0.65em;
+                padding: 6px 10px;
+            }
+
+            .ticker-content {
+                font-size: 0.78em;
             }
         }
 
-        /* === CURSOR BLINK (optional retro touch) === */
+        /* === CURSOR BLINK === */
         .blink {
             animation: blink 1s step-end infinite;
         }
@@ -145,13 +221,23 @@
     <div class="container">
         
         <!-- LOGO SECTION -->
-        <!-- To change the logo: replace lorn-logo.png with your new image file -->
         <div class="logo-section">
             <img src="lorn-logo.png" alt="Lunar Orbit Radio Network">
         </div>
 
+        <!-- NEWS TICKER -->
+        <div class="ticker-wrapper">
+            <div class="ticker-label">
+                <span class="pulse"></span>LIVE FEED
+            </div>
+            <div class="ticker-track" id="tickerTrack">
+                <div class="ticker-content" id="tickerContent">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
         <!-- MAIN CONTENT SECTION -->
-        <!-- Edit the text between the <p> tags below -->
         <div class="content-section">
             <h1 style="text-align: center;">Welcome to the Network</h1>
             
@@ -168,13 +254,80 @@
             </p>
         </div>
 
-        <!-- You can add more content sections by copying the div above -->
-
         <!-- FOOTER -->
         <footer>
             <p>&copy; 2026 Lunar Orbit Radio Network<span class="blink">_</span></p>
         </footer>
 
     </div>
+
+    <script>
+        // === TICKER LOGIC ===
+        // Fetches ticker.txt, shuffles lines randomly, builds a seamless looping scroll.
+        // To add/edit blurbs: just edit ticker.txt, one blurb per line.
+
+        const SCROLL_SPEED_PX_PER_SEC = 80; // increase = faster, decrease = slower
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        async function initTicker() {
+            let blurbs = [];
+
+            try {
+                const res = await fetch('ticker.txt?nocache=' + Date.now());
+                const text = await res.text();
+                blurbs = text.split('\n')
+                    .map(l => l.trim())
+                    .filter(l => l.length > 0);
+            } catch (e) {
+                // Fallback if file not found
+                blurbs = [
+                    'LORN LIVE — transmitting from L5 on all sub-etha frequencies',
+                    'SIGNAL CHECK — all systems nominal',
+                    'STANDING BY — awaiting ticker.txt'
+                ];
+            }
+
+            shuffle(blurbs);
+
+            const separator = '<span class="separator"> ◈ </span>';
+            const fullText = blurbs.join(separator);
+
+            // Build two copies side by side — the second copy makes the loop seamless
+            const el = document.getElementById('tickerContent');
+            el.innerHTML = fullText + separator + fullText + separator;
+
+            // Measure the width of ONE copy (half the total content)
+            // We animate exactly one copy width, then snap back — looks infinite
+            const track = document.getElementById('tickerTrack');
+            
+            // Wait a frame for layout
+            requestAnimationFrame(() => {
+                const fullWidth = el.scrollWidth; // both copies
+                const halfWidth = fullWidth / 2;
+                const duration = halfWidth / SCROLL_SPEED_PX_PER_SEC;
+
+                el.style.animationDuration = duration + 's';
+
+                // Inject a keyframe that moves exactly one copy width
+                const styleSheet = document.createElement('style');
+                styleSheet.textContent = `
+                    @keyframes ticker-scroll {
+                        0%   { transform: translateX(0); }
+                        100% { transform: translateX(-${halfWidth}px); }
+                    }
+                `;
+                document.head.appendChild(styleSheet);
+            });
+        }
+
+        initTicker();
+    </script>
 </body>
 </html>
