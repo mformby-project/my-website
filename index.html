@@ -6,6 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lunar Orbit Radio Network</title>
     <style>
+	.now-transmitting {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.nt-label {
+    color: #396fae;
+    font-size: 0.75em;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+}
+
+.nt-divider {
+    color: #396fae;
+    opacity: 0.5;
+    font-size: 0.85em;
+}
+
+.nt-frequency {
+    color: #00ffff;
+    font-size: 1.2em;
+    letter-spacing: 4px;
+    padding: 8px 0;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+}
         /* === RESET & BASE === */
         * {
             margin: 0;
@@ -395,7 +420,12 @@
             <h1 style="text-align: center;">Welcome to the Network</h1>
             
             <p>
-                Lunar Orbit Radio broadcasting live on sub-etha channels 52.387386-4.646219
+                <div class="now-transmitting">
+    <div class="nt-label">NOW TRANSMITTING</div>
+    <div class="nt-divider">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+    <div class="nt-frequency">SUB-ETHA &nbsp;|&nbsp; 52.387386 — 4.646219</div>
+    <div class="nt-divider">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+</div>
             </p>
 
             <p>
