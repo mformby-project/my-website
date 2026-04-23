@@ -187,6 +187,101 @@
             color: #00dd00;
         }
 
+        /* === TRANSMISSION LOG === */
+        .log-section {
+            background: rgba(0, 20, 0, 0.7);
+            border: 2px solid #396fae;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 0, 0.2),
+                inset 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        .log-section h1 {
+            color: #396fae;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+            font-size: 2em;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            text-align: center;
+        }
+
+        .log-subtitle {
+            color: #00aa00;
+            font-size: 0.85em;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .log-entry {
+            border-top: 1px solid rgba(57, 111, 174, 0.4);
+            padding: 20px 0;
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 0 24px;
+            align-items: start;
+        }
+
+        .log-entry:last-child {
+            border-bottom: 1px solid rgba(57, 111, 174, 0.4);
+        }
+
+        .log-date {
+            color: #396fae;
+            font-size: 0.75em;
+            letter-spacing: 2px;
+            padding-top: 3px;
+            white-space: nowrap;
+        }
+
+        .log-body {}
+
+        .log-title {
+            display: block;
+            color: #00ffff;
+            font-size: 1.05em;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border-bottom: 1px dotted #00ffff;
+            margin-bottom: 6px;
+            transition: all 0.3s;
+        }
+
+        .log-title:hover {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .log-summary {
+            color: #00aa00;
+            font-size: 0.88em;
+            line-height: 1.5;
+        }
+
+        .log-read-more {
+            display: inline-block;
+            margin-top: 8px;
+            color: #396fae;
+            font-size: 0.78em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-bottom: none;
+            transition: color 0.3s;
+        }
+
+        .log-read-more:hover {
+            color: #00ffff;
+            text-shadow: none;
+        }
+
+        .log-read-more::after {
+            content: ' →';
+        }
+
         /* === CONTACT FORM === */
         .form-section {
             background: rgba(0, 20, 0, 0.7);
@@ -287,7 +382,6 @@
             min-height: 130px;
         }
 
-        /* Honeypot — invisible to humans, bots fill it in and get silently discarded */
         .bot-field {
             display: none;
         }
@@ -357,12 +451,14 @@
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
             .content-section,
-            .form-section {
+            .form-section,
+            .log-section {
                 padding: 20px;
             }
 
             .content-section h1,
-            .form-section h1 {
+            .form-section h1,
+            .log-section h1 {
                 font-size: 1.5em;
             }
 
@@ -383,6 +479,11 @@
                 grid-template-columns: 1fr;
                 gap: 0;
             }
+
+            .log-entry {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
         }
 
         /* === CURSOR BLINK === */
@@ -400,7 +501,7 @@
         
         <!-- LOGO SECTION -->
         <div class="logo-section">
-            <img src="lorn-logo.png" alt="Lunar Orbit Radio Network">
+            <img src="lornlogo.png" alt="Lunar Orbit Radio Network">
         </div>
 
         <!-- NEWS TICKER -->
@@ -437,6 +538,21 @@
             </p>
         </div>
 
+        <!-- TRANSMISSION LOG -->
+        <div class="log-section">
+            <h1>Transmission Log</h1>
+            <p class="log-subtitle">// ARCHIVED BROADCASTS — SIGNAL LIBRARY //</p>
+
+            <div class="log-entry">
+                <div class="log-date">2026.04.23</div>
+                <div class="log-body">
+                    <a class="log-title" href="posts/first-transmission.html">First Transmission</a>
+                    <div class="log-summary">We're on the air. A short note from the crew on what LORN is, where we are, and why we're still broadcasting.</div>
+                    <a class="log-read-more" href="posts/first-transmission.html">Read transmission</a>
+                </div>
+            </div>
+        </div>
+
         <!-- CONTACT / SUBSPACE TRANSMISSION FORM -->
         <div class="form-section">
             <h1>Subspace Uplink</h1>
@@ -449,10 +565,8 @@
                 data-netlify-honeypot="bot-field"
                 id="contactForm"
             >
-                <!-- Required by Netlify for AJAX submission -->
                 <input type="hidden" name="form-name" value="subspace-uplink">
 
-                <!-- Honeypot — hidden from humans, bots fill it in and get discarded -->
                 <div class="bot-field">
                     <label>Leave this empty: <input name="bot-field"></label>
                 </div>
@@ -569,7 +683,6 @@
         initTicker();
 
         // === CONTACT FORM — AJAX SUBMIT FOR NETLIFY ===
-        // Submits without a full page reload and shows a themed status message.
         const form = document.getElementById('contactForm');
         const statusEl = document.getElementById('formStatus');
         const btn = document.getElementById('transmitBtn');
